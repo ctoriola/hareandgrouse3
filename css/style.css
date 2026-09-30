@@ -3,8 +3,8 @@
   --line:#efe3cc; --gold:#a67a2e; --gold-d:#8a6420;
   --r:26px; --ease:cubic-bezier(.2,.8,.2,1);
   --display:'Ojuju',system-ui,sans-serif;
-  --serif:'Ojuju',Georgia,serif;
-  --sans:'Ojuju',system-ui,sans-serif;
+  --serif:'Cormorant Garamond',Georgia,serif;
+  --sans:'Inter',system-ui,sans-serif;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
@@ -328,3 +328,9 @@ h3.display{font-size:clamp(20px,2vw,26px)}
 .mobile-menu a.active{color:#fff;text-decoration:underline;text-underline-offset:8px}
 .marquee-inner span::after{color:#fff}
 .eyebrow::before{background:var(--dark)}
+
+/* headers: bold Ojuju */
+.display,.brand,.mobile-menu a,.marquee-inner,.art-card .meta h4,.faq-q,.stats b,.feature .badge b,.footer .big,.pillar .num,.step .n,.t-item .yr{font-weight:700}
+/* hero pattern behind the curved carousel */
+.hero-bg{position:absolute;left:0;right:0;bottom:0;height:62%;z-index:0;pointer-events:none;background:url(../assets/hero-pattern.jpg) center/cover;opacity:.14;
+  -webkit-mask:linear-gradient(transparent,#000 30%,#000 80%,transparent);mask:linear-gradient(transparent,#000 30%,#000 80%,transparent)}
