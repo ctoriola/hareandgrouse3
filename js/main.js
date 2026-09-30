@@ -134,7 +134,7 @@ document.body.insertAdjacentHTML('beforeend', `
   <div><h5>Take Part</h5><ul><li><a href="participate.html#buy">Purchase or Bid</a></li><li><a href="participate.html#exhibit">Exhibit With Us</a></li><li><a href="participate.html#register">Register Artwork</a></li><li><a href="contact.html">Contact</a></li></ul></div>
   <div><h5>Newsletter</h5><p>Exhibition openings, new acquisitions and talks — a few letters a season.</p><form class="news" data-form><input type="email" required placeholder="Your email" aria-label="Email"><button>Subscribe</button></form><p class="form-note" style="margin-top:8px"></p></div>
 </div>
-<div class="big">Hare &amp; Grouse</div>
+<div class="big" aria-hidden="true">Hare &amp; Grouse</div>
 <div class="foot-bottom"><span>© ${new Date().getFullYear()} Hare &amp; Grouse. All rights reserved.</span><span><a href="mailto:info@hareandgrouse.com">info@hareandgrouse.com</a></span></div></footer>
 <button class="to-top" aria-label="Back to top"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 10V2M2.5 5.5 6 2l3.5 3.5"/></svg></button>`);
 
