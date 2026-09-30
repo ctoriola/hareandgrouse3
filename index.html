@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hare &amp; Grouse</title>
+<meta name="description" content="Hare & Grouse exhibits and promotes historical and cultural arts and crafts through research, exhibitions and cultural education.">
+<link rel="icon" href="assets/logo.png">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=IM+Fell+English+SC&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#e9e6de; --paper-2:#f3f0e8; --ink:#2b2621; --muted:#6f665b;
+  --gold:#c99a4a; --gold-d:#a67a2e; --line:rgba(60,50,40,.06);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--paper);color:var(--ink);font-family:'Cormorant Garamond',Georgia,serif;font-size:19px;line-height:1.6;overflow-x:hidden}
+.paper{
+  background-color:var(--paper);
+  background-image:
+    linear-gradient(var(--line) 1px,transparent 1px),
+    linear-gradient(90deg,var(--line) 1px,transparent 1px),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .35 0 0 0 0 .3 0 0 0 0 .25 0 0 0 .09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size:118px 118px,118px 118px,220px 220px;
+}
+
+/* ---------- HERO: pannable stamp canvas ---------- */
+#hero{position:relative;height:100vh;height:100svh;overflow:hidden;cursor:grab;touch-action:none;user-select:none}
+#hero.dragging{cursor:grabbing}
+#world{position:absolute;left:0;top:0;will-change:transform}
+.stamp{
+  position:absolute;padding:10px;background:#f4ecd8;
+  /* perforated edge */
+  -webkit-mask:radial-gradient(circle 3.5px at 50% 50%,#0000 96%,#000) -4.5px -4.5px/9px 9px round, linear-gradient(#000 0 0) center/calc(100% - 9px) calc(100% - 9px) no-repeat;
+          mask:radial-gradient(circle 3.5px at 50% 50%,#0000 96%,#000) -4.5px -4.5px/9px 9px round, linear-gradient(#000 0 0) center/calc(100% - 9px) calc(100% - 9px) no-repeat;
+  filter:drop-shadow(0 1px 1px rgba(0,0,0,.18)) drop-shadow(0 4px 6px rgba(0,0,0,.08));
+  transition:transform .35s cubic-bezier(.2,.8,.2,1);
+}
+.stamp-wrap{position:absolute;transition:transform .35s cubic-bezier(.2,.8,.2,1)}
+.stamp-wrap:hover{transform:translateY(-4px) scale(1.04);z-index:5}
+.stamp-wrap .shadow{position:absolute;inset:6px;box-shadow:0 10px 22px rgba(40,30,20,.18);opacity:0;transition:opacity .35s}
+.stamp-wrap:hover .shadow{opacity:1}
+.stamp .inner{position:relative;width:100%;height:100%;border:1.5px solid var(--c);display:flex;flex-direction:column;background:var(--bg)}
+.stamp .top,.stamp .bot{font-family:'IM Fell English SC',serif;color:var(--c);display:flex;justify-content:space-between;align-items:center;padding:2px 6px;font-size:12px;letter-spacing:.06em;line-height:1.2;white-space:nowrap}
+.stamp .top{justify-content:center}
+.stamp .bot span{overflow:hidden;text-overflow:ellipsis;min-width:0;font-size:10px}
+.stamp .bot b{font-weight:400;font-size:13px;margin-left:6px;flex:none}
+.stamp .top{font-size:10px;overflow:hidden}
+.stamp .art{flex:1;margin:0 6px;overflow:hidden;position:relative}
+.stamp .art svg{width:100%;height:100%;display:block}
+.stamp .art::after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 55%,rgba(60,40,20,.25));mix-blend-mode:multiply}
+
+.hud{position:absolute;z-index:10;pointer-events:none}
+.hud-brand{top:22px;left:24px;display:flex;align-items:center;gap:12px;pointer-events:auto}
+.hud-brand img{height:46px}
+.hud-nav{top:26px;right:24px;display:flex;gap:22px;pointer-events:auto;font-family:'Inter',sans-serif;font-size:13px;letter-spacing:.08em;text-transform:uppercase}
+.hud-nav a{color:var(--ink);text-decoration:none;background:rgba(243,240,232,.8);padding:6px 10px;backdrop-filter:blur(4px)}
+.hud-nav a:hover{color:var(--gold-d)}
+.hud-hint{bottom:22px;left:50%;transform:translateX(-50%);font-family:'Inter',sans-serif;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);background:rgba(243,240,232,.85);padding:8px 14px;display:flex;gap:8px;align-items:center}
+@media(max-width:640px){.hud-nav{display:none}.hud-brand{left:16px}}
+
+/* ---------- Sections ---------- */
+section.page{padding:120px 16px;border-top:1px solid rgba(0,0,0,.06)}
+.wrap{max-width:1120px;margin:0 auto}
+.eyebrow{font-family:'Inter',sans-serif;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-d);margin-bottom:18px}
+h2{font-family:'IM Fell English SC',serif;font-weight:400;font-size:clamp(34px,5vw,58px);line-height:1.05;margin-bottom:26px}
+p.lead{font-size:clamp(20px,2.2vw,25px);max-width:760px;color:#3d362e}
+.about-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:70px;align-items:center}
+.about-grid img{width:100%;max-width:380px;justify-self:center}
+.pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;margin-top:70px}
+.pillar{border-top:1px solid var(--gold);padding-top:18px}
+.pillar h3{font-family:'IM Fell English SC',serif;font-weight:400;font-size:26px;margin-bottom:6px}
+.pillar p{color:var(--muted);font-size:18px}
+
+.gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:44px 32px;margin-top:50px}
+.card{text-align:center}
+.card .stamp-wrap{position:relative;margin:0 auto}
+.card h4{font-family:'IM Fell English SC',serif;font-weight:400;font-size:22px;margin-top:16px}
+.card span{font-family:'Inter',sans-serif;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.filters{display:flex;gap:10px;flex-wrap:wrap}
+.filters button{font:500 12px 'Inter',sans-serif;letter-spacing:.12em;text-transform:uppercase;border:1px solid var(--ink);background:none;padding:9px 16px;cursor:pointer;color:var(--ink)}
+.filters button.on,.filters button:hover{background:var(--ink);color:var(--paper-2)}
+
+.ex{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;margin-top:40px}
+.ex article{background:var(--paper-2);padding:30px;border:1px solid rgba(0,0,0,.08);position:relative}
+.ex .date{font-family:'Inter',sans-serif;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-d)}
+.ex h3{font-family:'IM Fell English SC',serif;font-weight:400;font-size:28px;margin:10px 0}
+.ex p{color:var(--muted);font-size:18px}
+
+.cta{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-top:40px;border:1px solid var(--ink)}
+.cta a{padding:40px 30px;text-decoration:none;color:var(--ink);border-right:1px solid var(--ink);transition:background .3s}
+.cta a:last-child{border-right:0}
+.cta a:hover{background:var(--ink);color:var(--paper-2)}
+.cta h3{font-family:'IM Fell English SC',serif;font-weight:400;font-size:30px}
+.cta p{font-size:17px;opacity:.8}
+.cta .arrow{font-family:'Inter';font-size:22px;margin-top:20px;display:block}
+
+footer{background:#231f1b;color:#d9d1c2;padding:70px 16px 40px}
+footer .wrap{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:40px}
+footer img{height:90px;filter:brightness(1.05)}
+footer h5{font:500 12px 'Inter',sans-serif;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:14px}
+footer a{color:#d9d1c2;text-decoration:none;display:block;font-size:18px}
+footer a:hover{color:var(--gold)}
+footer .legal{grid-column:1/-1;border-top:1px solid #3a342d;padding-top:24px;font:12px 'Inter',sans-serif;color:#8d8577;letter-spacing:.06em}
+
+@media(max-width:860px){
+  .about-grid,.pillars,.ex,.cta,footer .wrap{grid-template-columns:1fr}
+  .cta a{border-right:0;border-bottom:1px solid var(--ink)}
+  .cta a:last-child{border-bottom:0}
+  section.page{padding:80px 16px}
+}
+</style>
+</head>
+<body>
+
+<header id="hero" class="paper" aria-label="Hare & Grouse collection — drag to explore">
+  <div id="world"></div>
+  <a class="hud hud-brand" href="#"><img src="assets/logo.png" alt="Hare & Grouse"></a>
+  <nav class="hud hud-nav">
+    <a href="#about">About</a><a href="#collection">Collection</a><a href="#exhibitions">Exhibitions</a><a href="#participate">Participate</a>
+  </nav>
+  <div class="hud hud-hint">✋ Drag to explore the collection</div>
+</header>
+
+<section id="about" class="page paper">
+  <div class="wrap about-grid">
+    <div>
+      <div class="eyebrow">About Hare &amp; Grouse</div>
+      <h2>Keeping the handmade, the historic &amp; the cultural in circulation.</h2>
+      <p class="lead">Hare &amp; Grouse exhibits and promotes historical and cultural arts and crafts. Our collection reflects a high value placed on craft, and our work continues through research, exhibitions and cultural education — bringing artists and collectors together around works worth keeping.</p>
+    </div>
+    <img src="assets/logo.png" alt="">
+  </div>
+  <div class="wrap pillars">
+    <div class="pillar"><h3>Research</h3><p>We study the histories, makers and materials behind every piece we present.</p></div>
+    <div class="pillar"><h3>Exhibitions</h3><p>Curated shows that place contemporary painting beside heritage craft.</p></div>
+    <div class="pillar"><h3>Cultural Education</h3><p>Talks, programmes and writing that open the collection to everyone.</p></div>
+  </div>
+</section>
+
+<section id="collection" class="page paper">
+  <div class="wrap">
+    <div class="eyebrow">The Collection</div>
+    <h2>Works currently on view &amp; available to acquire</h2>
+    <div class="filters" id="filters">
+      <button class="on" data-f="All">All</button><button data-f="Abstract">Abstract</button><button data-f="Nature">Nature</button><button data-f="Figurative">Figurative</button>
+    </div>
+    <div class="gallery" id="gallery"></div>
+  </div>
+</section>
+
+<section id="exhibitions" class="page paper">
+  <div class="wrap">
+    <div class="eyebrow">Exhibitions</div>
+    <h2>On the walls</h2>
+    <div class="ex">
+      <article><div class="date">Now showing</div><h3>Before the Divide</h3><p>Painting that holds the moment just before change — landscape, memory and threshold.</p></article>
+      <article><div class="date">Upcoming</div><h3>Hand &amp; Heritage</h3><p>Traditional crafts from across regions, presented with the research that surrounds them.</p></article>
+      <article><div class="date">Archive</div><h3>New Life</h3><p>A survey of nature-led work from emerging and established artists in the collection.</p></article>
+    </div>
+  </div>
+</section>
+
+<section id="participate" class="page paper">
+  <div class="wrap">
+    <div class="eyebrow">Take Part</div>
+    <h2>Collect, exhibit, or join the collection</h2>
+    <div class="cta">
+      <a href="#collection"><h3>Purchase or Bid</h3><p>Acquire works from the current collection.</p><span class="arrow">→</span></a>
+      <a href="#exhibitions"><h3>Exhibit With Us</h3><p>Apply to take part in an upcoming exhibition.</p><span class="arrow">→</span></a>
+      <a href="mailto:info@hareandgrouse.com?subject=Register%20Artwork"><h3>Register Artwork</h3><p>Submit your work for consideration.</p><span class="arrow">→</span></a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div><img src="assets/logo.png" alt="Hare & Grouse"></div>
+    <div><h5>Explore</h5><a href="#about">About</a><a href="#collection">Collection</a><a href="#exhibitions">Exhibitions</a></div>
+    <div><h5>Contact</h5><a href="mailto:info@hareandgrouse.com">info@hareandgrouse.com</a><a href="https://hareandgrouse.com">hareandgrouse.com</a></div>
+    <div class="legal">© <span id="yr"></span> Hare &amp; Grouse. Historical &amp; cultural arts and crafts.</div>
+  </div>
+</footer>
+
+<script>
+// ---------- Artwork data (titles from the Hare & Grouse collection) ----------
+const WORKS=[
+ {t:"Before the Divide",cat:"Nature",c:"#6b2a1f",bg:"#f1e3c6",v:"8¢",land:"HARE & GROUSE"},
+ {t:"6th Sense",cat:"Abstract",c:"#3e3a6b",bg:"#ebe4d0",v:"2 ΔΡΧ",land:"H&G POSTAGE"},
+ {t:"New Life",cat:"Nature",c:"#2f5a3a",bg:"#e3e6cf",v:"2 ANNAS",land:"COLLECTION"},
+ {t:"Broken Rose",cat:"Figurative",c:"#7a3a4c",bg:"#efdfd8",v:"2 CENTS",land:"H&G POSTAGE"},
+ {t:"Quiet Harbour",cat:"Nature",c:"#2d4d63",bg:"#e2e6e2",v:"10¢",land:"EXHIBITION"},
+ {t:"Grouse at Dusk",cat:"Nature",c:"#5c4630",bg:"#eee0c4",v:"15¢",land:"HARE & GROUSE"},
+ {t:"Threshold",cat:"Abstract",c:"#3b3b35",bg:"#e6e3d6",v:"2 CENTS",land:"H&G POSTAGE"},
+ {t:"The Hare",cat:"Figurative",c:"#6a4a2a",bg:"#f0e4cc",v:"30 F",land:"COLLECTION"},
+ {t:"Ochre Field",cat:"Abstract",c:"#8a4b1c",bg:"#f3e2c0",v:"8分",land:"EXHIBITION"},
+ {t:"Old Quarter",cat:"Figurative",c:"#5a3f5e",bg:"#ece2e6",v:"3 CENTS",land:"HARE & GROUSE"},
+ {t:"Tidewater",cat:"Nature",c:"#27546b",bg:"#dfe7e8",v:"5¢",land:"H&G POSTAGE"},
+ {t:"Loom & Thread",cat:"Abstract",c:"#7b2c2c",bg:"#f0dccf",v:"100",land:"CRAFT SERIES"},
+];
+
+// Seeded random for deterministic artwork
+function rng(s){return()=>(s=(s*16807)%2147483647)/2147483647}
+const PAL=[["#e4b15b","#b5452f","#5a3c6e","#2f4a3a","#f3e6c8"],["#7da27a","#3e6b52","#d8c89a","#9b6a3a","#efe6cf"],
+ ["#c96f3b","#e8c16a","#6b3a2a","#4e6f86","#f2e3c4"],["#8a8f7a","#3b3b35","#d9d2bd","#a58a5c","#ece6d4"],
+ ["#b3576a","#e9c7b8","#5c3040","#7d8c6a","#f4e6dc"],["#4f7b95","#c7d6d2","#23465a","#d4a55a","#e9ece6"]];
+function art(i,w,h){
+  const r=rng(i*977+13),p=PAL[i%PAL.length],k=i%4;let s=`<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><rect width="${w}" height="${h}" fill="${p[4]}"/>`;
+  if(k===0){ // landscape: sky, hills, sun
+    s+=`<rect width="${w}" height="${h*.55}" fill="${p[4]}"/><circle cx="${w*(.25+r()*.5)}" cy="${h*.3}" r="${h*.12}" fill="${p[0]}"/>`;
+    for(let j=0;j<3;j++){const y=h*(.45+j*.15);s+=`<path d="M0 ${y} Q ${w*r()} ${y-h*.2} ${w} ${y+h*.05} V ${h} H 0Z" fill="${p[1+j]}" opacity=".92"/>`}
+  }else if(k===1){ // modernist arches
+    s+=`<rect width="${w}" height="${h}" fill="${p[0]}"/><path d="M${w*.45} ${h} V${h*.35} a${w*.3} ${w*.3} 0 0 1 ${w*.6} 0 V${h}Z" fill="${p[1]}"/><path d="M${w*.1} ${h} V${h*.55} a${w*.18} ${w*.18} 0 0 1 ${w*.36} 0 V${h}Z" fill="${p[2]}"/><rect y="${h*.85}" width="${w}" height="${h*.15}" fill="${p[3]}" opacity=".8"/>`;
+  }else if(k===2){ // botanical
+    s+=`<rect width="${w}" height="${h}" fill="${p[3]}" opacity=".35"/>`;
+    for(let j=0;j<7;j++){const x=w*r(),y=h*(.3+r()*.6);s+=`<path d="M${x} ${h} Q ${x+10} ${y+20} ${x} ${y}" stroke="${p[2]}" stroke-width="2" fill="none"/>`;
+      for(let q=0;q<5;q++){const a=q*72;s+=`<ellipse cx="${x}" cy="${y-6}" rx="4" ry="9" fill="${p[0]}" transform="rotate(${a} ${x} ${y})"/>`}s+=`<circle cx="${x}" cy="${y}" r="3.5" fill="${p[1]}"/>`}
+  }else{ // abstract blocks
+    for(let j=0;j<6;j++){s+=`<rect x="${w*r()*.8}" y="${h*r()*.8}" width="${w*(.2+r()*.5)}" height="${h*(.15+r()*.4)}" fill="${p[j%4]}" opacity="${.6+r()*.4}"/>`}
+    s+=`<circle cx="${w*r()}" cy="${h*r()}" r="${w*.12}" fill="none" stroke="${p[2]}" stroke-width="3"/>`;
+  }
+  s+=`<rect width="${w}" height="${h}" fill="url(#g)" opacity=".0"/></svg>`;return s;
+}
+function stampHTML(i,w,h){
+  const d=WORKS[i%WORKS.length];
+  return `<div class="shadow"></div><div class="stamp" style="width:${w}px;height:${h}px;--c:${d.c};--bg:${d.bg}">
+   <div class="inner"><div class="top">${d.land}</div><div class="art">${art(i,w-26,h-58)}</div>
+   <div class="bot"><span>${d.t.toUpperCase()}</span><b>${d.v}</b></div></div></div>`;
+}
+
+// ---------- Hero: infinite pannable stamp field ----------
+const hero=document.getElementById('hero'),world=document.getElementById('world');
+const TILE=1400; // repeating tile size
+const SIZES=[[150,120],[120,150],[170,125],[110,140],[140,110]];
+const placed=[];
+(function layout(){ // scatter stamps in a tile with a jittered grid, no overlap
+  const r=rng(42),cell=205;let n=0;
+  for(let gy=0;gy<TILE/cell;gy++)for(let gx=0;gx<TILE/cell;gx++){
+    if(r()<.18)continue;
+    const [w,h]=SIZES[Math.floor(r()*SIZES.length)];
+    placed.push({x:gx*cell+r()*(cell-w-20),y:gy*cell+r()*(cell-h-20),w,h,i:n++});
+  }
+})();
+const nodes=new Map();
+let ox=-200,oy=-150,vx=0,vy=0,drag=false,lx=0,ly=0,lt=0;
+function render(){
+  const W=hero.clientWidth,H=hero.clientHeight,seen=new Set();
+  const tx0=Math.floor((-ox-TILE)/TILE),tx1=Math.floor((-ox+W)/TILE),ty0=Math.floor((-oy-TILE)/TILE),ty1=Math.floor((-oy+H)/TILE);
+  for(let ty=ty0;ty<=ty1;ty++)for(let tx=tx0;tx<=tx1;tx++)for(const p of placed){
+    const x=tx*TILE+p.x,y=ty*TILE+p.y;
+    if(x+ox>W||y+oy>H||x+ox+p.w<0||y+oy+p.h<0)continue;
+    const key=tx+','+ty+','+p.i;seen.add(key);
+    if(!nodes.has(key)){const el=document.createElement('div');el.className='stamp-wrap';el.style.cssText=`left:${x}px;top:${y}px;width:${p.w}px;height:${p.h}px`;
+      el.innerHTML=stampHTML(p.i+Math.abs(tx*7+ty*3),p.w,p.h);world.appendChild(el);nodes.set(key,el)}
+  }
+  for(const [k,el] of nodes)if(!seen.has(k)){el.remove();nodes.delete(k)}
+  world.style.transform=`translate3d(${ox}px,${oy}px,0)`;
+}
+hero.addEventListener('pointerdown',e=>{if(e.target.closest('a'))return;drag=true;hero.classList.add('dragging');hero.setPointerCapture(e.pointerId);lx=e.clientX;ly=e.clientY;lt=performance.now();vx=vy=0});
+hero.addEventListener('pointermove',e=>{if(!drag)return;const dx=e.clientX-lx,dy=e.clientY-ly,now=performance.now(),dt=Math.max(1,now-lt);
+  ox+=dx;oy+=dy;vx=dx/dt*16;vy=dy/dt*16;lx=e.clientX;ly=e.clientY;lt=now;render()});
+const end=()=>{drag=false;hero.classList.remove('dragging')};
+hero.addEventListener('pointerup',end);hero.addEventListener('pointercancel',end);
+hero.addEventListener('wheel',e=>{if(e.shiftKey||Math.abs(e.deltaX)>Math.abs(e.deltaY)){e.preventDefault();ox-=e.deltaX||e.deltaY;render()}},{passive:false});
+(function tick(){ if(!drag&&(Math.abs(vx)>.05||Math.abs(vy)>.05)){ox+=vx;oy+=vy;vx*=.94;vy*=.94;render()} requestAnimationFrame(tick)})();
+addEventListener('resize',render);render();
+
+// ---------- Collection gallery ----------
+const gal=document.getElementById('gallery');
+function drawGallery(f){
+  gal.innerHTML=WORKS.map((d,i)=>(f==='All'||d.cat===f)?`<div class="card"><div class="stamp-wrap" style="width:190px;height:230px">${stampHTML(i,190,230)}</div><h4>${d.t}</h4><span>${d.cat}</span></div>`:'').join('');
+}
+document.getElementById('filters').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
+  document.querySelectorAll('#filters button').forEach(x=>x.classList.toggle('on',x===b));drawGallery(b.dataset.f)});
+drawGallery('All');
+document.getElementById('yr').textContent=new Date().getFullYear();
+</script>
+</body>
+</html>
