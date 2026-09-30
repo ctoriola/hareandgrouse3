@@ -2,7 +2,7 @@
   --bg:#f6efe1; --card:#fff; --ink:#3b2c12; --muted:#8a7654; --soft:#fbf6ec; --dark:#b8893a;
   --line:#efe3cc; --gold:#a67a2e; --gold-d:#8a6420;
   --r:26px; --ease:cubic-bezier(.2,.8,.2,1);
-  --display:'Sora',system-ui,sans-serif; --accent:'Ojuju',system-ui,sans-serif;
+  --display:'Cormorant Garamond',Georgia,serif;
   --serif:'Cormorant Garamond',Georgia,serif;
   --sans:'Manrope',system-ui,sans-serif;
 }
@@ -329,10 +329,14 @@ h3.display{font-size:clamp(20px,2vw,26px)}
 .marquee-inner span::after{color:#fff}
 .eyebrow::before{background:var(--dark)}
 
-/* headers: bold Ojuju */
-.display,.art-card .meta h4,.faq-q,.feature .badge b,.pillar .num,.step .n,.t-item .yr{font-weight:600;letter-spacing:-.02em}
-/* Ojuju reserved for signature moments */
-h1.display,.brand,.mobile-menu a,.marquee-inner,.footer .big,.cta-band h2.display,.stats b{font-family:var(--accent);font-weight:700;letter-spacing:0}
+/* headings: Cormorant Garamond, tightened */
+.display,.brand,.mobile-menu a,.marquee-inner,.footer .big,.stats b,.art-card .meta h4,.faq-q,.feature .badge b,.pillar .num,.step .n,.t-item .yr{font-weight:600;letter-spacing:-.025em}
+h1.display{font-size:clamp(40px,7vw,84px);line-height:1;letter-spacing:-.035em}
+h2.display{font-size:clamp(32px,4.8vw,58px);line-height:1.02;letter-spacing:-.03em}
+h3.display{font-size:clamp(22px,2.3vw,30px)}
+.art-card .meta h4{font-size:21px}
+body{letter-spacing:-.012em}
+.eyebrow{letter-spacing:.1em}
 /* hero pattern behind the curved carousel */
 .hero-bg{position:absolute;left:0;right:0;bottom:0;height:62%;z-index:0;pointer-events:none;background:url(../assets/hero-pattern.jpg) center/cover;opacity:.14;
   -webkit-mask:linear-gradient(transparent,#000 30%,#000 80%,transparent);mask:linear-gradient(transparent,#000 30%,#000 80%,transparent)}
