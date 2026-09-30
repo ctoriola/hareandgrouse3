@@ -4,7 +4,7 @@
   --r:26px; --ease:cubic-bezier(.2,.8,.2,1);
   --display:'Ojuju',system-ui,sans-serif;
   --serif:'Cormorant Garamond',Georgia,serif;
-  --sans:'Inter',system-ui,sans-serif;
+  --sans:'Manrope',system-ui,sans-serif;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
